@@ -12,8 +12,8 @@ import { defineComponent, reactive, toRefs } from 'vue';
 import { JournalTemplate } from '../types/journal-template';
 
 interface State {
-  journalTemplates: JournalTemplate[];
-  filteredJournalTemplates: JournalTemplate[];
+  journalTemplates: readonly JournalTemplate[];
+  filteredJournalTemplates: readonly JournalTemplate[];
   visibilityState: boolean;
   timeoutId: number | null;
 }

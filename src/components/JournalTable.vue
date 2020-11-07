@@ -19,8 +19,8 @@ import { defineComponent, reactive, toRefs } from 'vue';
 import { Journal } from '../types/journal';
 
 interface State {
-  journals: Journal[];
-  filteredJournals: Journal[];
+  journals: readonly Journal[];
+  filteredJournals: readonly Journal[];
 }
 
 export default defineComponent({
