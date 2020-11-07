@@ -91,9 +91,14 @@ export default defineComponent({
       state.filteredJournals = state.journals.filter(_ => _.selfAccountId === selfAccountId);
     };
 
+    const addJournal = (journal: Omit<Journal, 'id'>) => {
+      state.journals = [...state.journals, { ...journal, id: state.journals.length + 1 }];
+    };
+
     return {
       ...toRefs(state),
-      filterJournalsBySelfAccountId
+      filterJournalsBySelfAccountId,
+      addJournal
     };
   }
 })

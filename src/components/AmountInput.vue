@@ -1,12 +1,33 @@
 <template>
-  <input class="amount-input" type="text" value=""/>
+  <input
+    type="text"
+    class="amount-input"
+    v-model="amount"
+    />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, reactive, toRefs } from 'vue';
+
+interface State {
+  amount: string;
+}
 
 export default defineComponent({
-  name: 'AmountInput'
+  name: 'AmountInput',
+
+  setup() {
+    const state = reactive<State>({
+      amount: ''
+    });
+
+    const getAmount = () => state.amount;
+
+    return {
+      ...toRefs(state),
+      getAmount
+    }
+  }
 })
 </script>
 

@@ -30,7 +30,9 @@ export default defineComponent({
       currentAccountId: 1
     });
 
-    const getCurrentAccountId = () => state.currentAccountId;
+    const getAccountId = () => state.currentAccountId;
+
+    const getAccount = () => state.accounts.find(_ => _.id === state.currentAccountId);
 
     watch(
       () => state.currentAccountId,
@@ -41,7 +43,8 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      getCurrentAccountId
+      getAccountId,
+      getAccount
     };
   }
 })

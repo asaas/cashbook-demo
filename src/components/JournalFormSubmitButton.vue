@@ -1,12 +1,27 @@
 <template>
-  <button class="journal-form-submit-button">入力</button>
+  <button
+    class="journal-form-submit-button"
+    @click="handleClick"
+    >
+    入力
+  </button>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'JournalFormSubmitButton'
+  name: 'JournalFormSubmitButton',
+
+  setup(_, context) {
+    const handleClick = () => {
+      context.emit('submit');
+    };
+
+    return {
+      handleClick
+    };
+  }
 })
 </script>
 

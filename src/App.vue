@@ -5,30 +5,30 @@
     <div>自科目</div>
     <v-spacer width="5px" />
     <account-select
-      ref="selfAccount"
+      ref="selfAccountSelect"
       @account-change="handleSelfAccountChange"
       />
   </div>
   <v-spacer height="30px" />
-  <journal-table ref="journals" />
+  <journal-table ref="journalTable" />
   <v-spacer height="30px" />
   <div class="journal-form">
     <div class="description">
       <div>摘要</div>
-      <description-input />
+      <description-input ref="descriptionInput" />
     </div>
     <v-spacer width="10px" />
     <div class="corr-account">
       <div>相手科目</div>
-      <account-select />
+      <account-select ref="corrAccountSelect" />
     </div>
     <v-spacer width="10px" />
     <div class="amount">
       <div>金額</div>
-      <amount-input />
+      <amount-input ref="amountInput" />
     </div>
     <v-spacer width="10px" />
-    <journal-form-submit-button />
+    <journal-form-submit-button @submit="handleSubmit" />
   </div>
   <v-spacer height="30px" />
   <journal-template-table />
@@ -61,23 +61,50 @@ export default defineComponent({
   },
 
   setup() {
-    const selfAccount = ref(null);
-    const journals = ref(null);
+    const selfAccountSelect = ref(null);
+    const journalTable = ref(null);
+    const descriptionInput = ref(null);
+    const corrAccountSelect = ref(null);
+    const amountInput = ref(null);
 
     const handleSelfAccountChange = (selfAccountId: number) => {
-      (journals.value as any).filterJournalsBySelfAccountId(selfAccountId);
+      (journalTable.value as any).filterJournalsBySelfAccountId(selfAccountId);
     };
 
-    nextTick(() => {
-      const selfAccountId = (selfAccount.value as any).getCurrentAccountId();
+    const handleSubmit = () => {
+      const selfAccount = (selfAccountSelect.value as any).getAccount();
+      const corrAccount = (corrAccountSelect.value as any).getAccount();
+      const description = (descriptionInput.value as any).getDescription();
+      const amount = (amountInput.value as any).getAmount();
 
-      (journals.value as any).filterJournalsBySelfAccountId(selfAccountId);
-    });
+      (journalTable.value as any).addJournal({
+        selfAccountId: selfAccount.id,
+        selfAccountName: selfAccount.name,
+        corrAccountId: corrAccount.id,
+        corrAccountName: corrAccount.name,
+        description,
+        amount
+      });
+
+      (journalTable.value as any).filterJournalsBySelfAccountId(selfAccount.id);
+    };
+
+    const init = () => {
+      const selfAccountId = (selfAccountSelect.value as any).getAccountId();
+
+      (journalTable.value as any).filterJournalsBySelfAccountId(selfAccountId);
+    }
+
+    nextTick(init);
 
     return {
-      selfAccount,
-      journals,
-      handleSelfAccountChange
+      selfAccountSelect,
+      journalTable,
+      corrAccountSelect,
+      descriptionInput,
+      amountInput,
+      handleSelfAccountChange,
+      handleSubmit
     };
   }
 });

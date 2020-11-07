@@ -1,12 +1,33 @@
 <template>
-  <input class="description-input" type="text" value=""/>
+  <input
+    type="text"
+    class="description-input"
+    v-model="description"
+    />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, reactive, toRefs } from 'vue';
+
+interface State {
+  description: string;
+}
 
 export default defineComponent({
-  name: 'DescriptionInput'
+  name: 'DescriptionInput',
+
+  setup() {
+    const state = reactive<State>({
+      description: ''
+    });
+
+    const getDescription = () => state.description;
+
+    return {
+      ...toRefs(state),
+      getDescription
+    }
+  }
 })
 </script>
 
