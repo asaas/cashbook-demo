@@ -1,9 +1,23 @@
 <template>
   <div class="heading">cashbook-demo</div>
   <v-spacer height="30px" />
-  <account-select />
+  <div class="self-account">
+    <div>自科目</div>
+    <v-spacer width="5px" />
+    <account-select />
+  </div>
   <v-spacer height="30px" />
-  <description-input />
+  <div class="journal-form">
+    <div class="description">
+      <div>摘要</div>
+      <description-input />
+    </div>
+    <v-spacer width="10px" />
+    <div class="corr-account">
+      <div>相手科目</div>
+      <account-select />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -35,5 +49,14 @@ export default defineComponent({
 
 .heading {
   font-size: var(--font-size);
+}
+
+.self-account {
+  display: flex;
+  align-items: center;
+}
+
+.journal-form {
+  display: flex;
 }
 </style>
