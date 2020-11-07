@@ -2,12 +2,15 @@
   <div class="heading">cashbook-demo</div>
   <v-spacer height="30px" />
   <account-select />
+  <v-spacer height="30px" />
+  <description-input />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 
 import AccountSelect from './components/AccountSelect.vue'
+import DescriptionInput from './components/DescriptionInput.vue'
 import VSpacer from './components/VSpacer.vue'
 
 export default defineComponent({
@@ -15,6 +18,7 @@ export default defineComponent({
 
   components: {
     AccountSelect,
+    DescriptionInput,
     VSpacer
   }
 });
@@ -26,7 +30,7 @@ export default defineComponent({
 }
 
 :root {
-  --font-size: 20px;
+  --font-size: 15px;
 }
 
 .heading {
