@@ -22,6 +22,8 @@
       <div>金額</div>
       <amount-input />
     </div>
+    <v-spacer width="10px" />
+    <journal-form-submit-button />
   </div>
 </template>
 
@@ -31,6 +33,7 @@ import { defineComponent } from 'vue';
 import AccountSelect from './components/AccountSelect.vue'
 import DescriptionInput from './components/DescriptionInput.vue'
 import AmountInput from './components/AmountInput.vue'
+import JournalFormSubmitButton from './components/JournalFormSubmitButton.vue'
 import VSpacer from './components/VSpacer.vue'
 
 export default defineComponent({
@@ -40,6 +43,7 @@ export default defineComponent({
     AccountSelect,
     DescriptionInput,
     AmountInput,
+    JournalFormSubmitButton,
     VSpacer
   }
 });
@@ -65,5 +69,6 @@ export default defineComponent({
 
 .journal-form {
   display: flex;
+  align-items: flex-end;
 }
 </style>
