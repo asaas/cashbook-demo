@@ -1,7 +1,7 @@
 <template>
   <table class="journal-template-table">
     <tr v-for="(jt, i) in filteredJournalTemplates" :key="jt.id">
-      <td>{{`-${i + 1} ${jt.description}`}}</td>
+      <td @click="handleItemClick(jt)">{{`-${i + 1} ${jt.description}`}}</td>
     </tr>
   </table>
 </template>
@@ -19,7 +19,7 @@ interface State {
 export default defineComponent({
   name: 'JournalTemplateTable',
 
-  setup() {
+  setup(_, context) {
     const state = reactive<State>({
       journalTemplates: [
         {
@@ -47,21 +47,21 @@ export default defineComponent({
           id: 4,
           selfAccountId: 4,
           corrAccountId: 1,
-          description: '自科目=仕入, 相手科目=現金, 金額=4000',
+          description: 'test1',
           amount: '4000'
         },
         {
           id: 5,
           selfAccountId: 4,
           corrAccountId: 2,
-          description: '自科目=仕入, 相手科目=預金, 金額=5000',
+          description: 'test2',
           amount: '5000'
         },
         {
           id: 6,
           selfAccountId: 6,
           corrAccountId: 1,
-          description: '自科目=雑収入, 相手科目=現金, 金額=6000',
+          description: 'test3',
           amount: '6000'
         }
       ],
@@ -73,9 +73,14 @@ export default defineComponent({
         state.journalTemplates.filter(_ => _.selfAccountId === selfAccountId);
     };
 
+    const handleItemClick = (item: JournalTemplate) => {
+      context.emit('item-select', item);
+    };
+
     return {
       ...toRefs(state),
-      filterJournalTemplatesBySelfAccountId
+      filterJournalTemplatesBySelfAccountId,
+      handleItemClick
     };
   }
 })

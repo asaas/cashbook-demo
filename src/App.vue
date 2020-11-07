@@ -31,7 +31,10 @@
     <journal-form-submit-button @submit="handleSubmit" />
   </div>
   <v-spacer height="30px" />
-  <journal-template-table ref="templateTable"/>
+  <journal-template-table
+    ref="templateTable"
+    @item-select="handleItemSelect"
+    />
 </template>
 
 <script lang="ts">
@@ -46,6 +49,7 @@ import AmountInput from './components/AmountInput.vue'
 import JournalFormSubmitButton from './components/JournalFormSubmitButton.vue'
 import JournalTemplateTable from './components/JournalTemplateTable.vue'
 import VSpacer from './components/VSpacer.vue'
+import { JournalTemplate } from './types/journal-template';
 
 export default defineComponent({
   name: 'App',
@@ -96,6 +100,12 @@ export default defineComponent({
       (amountInput.value as any).setAmount('');
     };
 
+    const handleItemSelect = (item: JournalTemplate) => {
+      (descriptionInput.value as any).setDescription(item.description);
+      (corrAccountSelect.value as any).setAccountId(item.corrAccountId);
+      (amountInput.value as any).setAmount(item.amount);
+    };
+
     const init = () => {
       const selfAccountId = (selfAccountSelect.value as any).getAccountId();
 
@@ -114,7 +124,8 @@ export default defineComponent({
       amountInput,
       templateTable,
       handleSelfAccountChange,
-      handleSubmit
+      handleSubmit,
+      handleItemSelect
     };
   }
 });
