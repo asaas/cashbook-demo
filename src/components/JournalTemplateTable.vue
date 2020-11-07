@@ -1,6 +1,6 @@
 <template>
   <table class="journal-template-table">
-    <tr v-for="(jt, i) in journalTemplates" :key="jt.id">
+    <tr v-for="(jt, i) in filteredJournalTemplates" :key="jt.id">
       <td>{{`-${i + 1} ${jt.description}`}}</td>
     </tr>
   </table>
@@ -13,6 +13,7 @@ import { JournalTemplate } from '../types/journal-template';
 
 interface State {
   journalTemplates: JournalTemplate[];
+  filteredJournalTemplates: JournalTemplate[];
 }
 
 export default defineComponent({
@@ -63,11 +64,18 @@ export default defineComponent({
           description: '自科目=雑収入, 相手科目=現金, 金額=6000',
           amount: '6000'
         }
-      ]
+      ],
+      filteredJournalTemplates: []
     });
 
+    const filterJournalTemplatesBySelfAccountId = (selfAccountId: number) => {
+      state.filteredJournalTemplates =
+        state.journalTemplates.filter(_ => _.selfAccountId === selfAccountId);
+    };
+
     return {
-      ...toRefs(state)
+      ...toRefs(state),
+      filterJournalTemplatesBySelfAccountId
     };
   }
 })

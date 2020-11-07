@@ -31,7 +31,7 @@
     <journal-form-submit-button @submit="handleSubmit" />
   </div>
   <v-spacer height="30px" />
-  <journal-template-table />
+  <journal-template-table ref="templateTable"/>
 </template>
 
 <script lang="ts">
@@ -66,9 +66,12 @@ export default defineComponent({
     const descriptionInput = ref(null);
     const corrAccountSelect = ref(null);
     const amountInput = ref(null);
+    const templateTable = ref(null);
 
     const handleSelfAccountChange = (selfAccountId: number) => {
       (journalTable.value as any).filterJournalsBySelfAccountId(selfAccountId);
+
+      (templateTable.value as any).filterJournalTemplatesBySelfAccountId(selfAccountId);
     };
 
     const handleSubmit = () => {
@@ -97,6 +100,8 @@ export default defineComponent({
       const selfAccountId = (selfAccountSelect.value as any).getAccountId();
 
       (journalTable.value as any).filterJournalsBySelfAccountId(selfAccountId);
+
+      (templateTable.value as any).filterJournalTemplatesBySelfAccountId(selfAccountId);
     }
 
     nextTick(init);
@@ -107,6 +112,7 @@ export default defineComponent({
       corrAccountSelect,
       descriptionInput,
       amountInput,
+      templateTable,
       handleSelfAccountChange,
       handleSubmit
     };
