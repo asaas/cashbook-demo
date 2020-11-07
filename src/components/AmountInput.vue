@@ -23,9 +23,14 @@ export default defineComponent({
 
     const getAmount = () => state.amount;
 
+    const setAmount = (amount: string) => {
+      state.amount = amount;
+    };
+
     return {
       ...toRefs(state),
-      getAmount
+      getAmount,
+      setAmount
     }
   }
 })

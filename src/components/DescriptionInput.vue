@@ -23,9 +23,14 @@ export default defineComponent({
 
     const getDescription = () => state.description;
 
+    const setDescription = (description: string) => {
+      state.description = description;
+    };
+
     return {
       ...toRefs(state),
-      getDescription
+      getDescription,
+      setDescription
     }
   }
 })

@@ -87,6 +87,10 @@ export default defineComponent({
       });
 
       (journalTable.value as any).filterJournalsBySelfAccountId(selfAccount.id);
+
+      (descriptionInput.value as any).setDescription('');
+      (corrAccountSelect.value as any).setAccountId(1);
+      (amountInput.value as any).setAmount('');
     };
 
     const init = () => {
