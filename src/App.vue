@@ -15,7 +15,10 @@
   <div class="journal-form">
     <div class="description">
       <div>摘要</div>
-      <description-input ref="descriptionInput" />
+      <description-input
+        ref="descriptionInput"
+        @index-input="handleIndexInput"
+        />
     </div>
     <v-spacer width="10px" />
     <div class="corr-account">
@@ -100,10 +103,22 @@ export default defineComponent({
       (amountInput.value as any).setAmount('');
     };
 
-    const handleItemSelect = (item: JournalTemplate) => {
+    const setTemplateToForm = (item: JournalTemplate) => {
       (descriptionInput.value as any).setDescription(item.description);
       (corrAccountSelect.value as any).setAccountId(item.corrAccountId);
       (amountInput.value as any).setAmount(item.amount);
+    };
+
+    const handleItemSelect = (item: JournalTemplate) => {
+      setTemplateToForm(item);
+    };
+
+    const handleIndexInput = (index: string) => {
+      const item = (templateTable.value as any).findJournalTemplatesByIndex(index);
+
+      if (item) {
+        setTemplateToForm(item);
+      }
     };
 
     const init = () => {
@@ -125,7 +140,8 @@ export default defineComponent({
       templateTable,
       handleSelfAccountChange,
       handleSubmit,
-      handleItemSelect
+      handleItemSelect,
+      handleIndexInput
     };
   }
 });

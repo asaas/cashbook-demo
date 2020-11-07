@@ -39,7 +39,7 @@ export default defineComponent({
         {
           id: 3,
           selfAccountId: 1,
-          corrAccountId: 3,
+          corrAccountId: 6,
           description: '自科目=現金, 相手科目=雑収入, 金額=3000',
           amount: '3000'
         },
@@ -73,6 +73,10 @@ export default defineComponent({
         state.journalTemplates.filter(_ => _.selfAccountId === selfAccountId);
     };
 
+    const findJournalTemplatesByIndex =
+      (index: string) =>
+        state.filteredJournalTemplates.find((_, i) => `-${i + 1}` === index);
+
     const handleItemClick = (item: JournalTemplate) => {
       context.emit('item-select', item);
     };
@@ -80,6 +84,7 @@ export default defineComponent({
     return {
       ...toRefs(state),
       filterJournalTemplatesBySelfAccountId,
+      findJournalTemplatesByIndex,
       handleItemClick
     };
   }

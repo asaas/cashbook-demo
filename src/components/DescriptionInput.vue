@@ -3,6 +3,7 @@
     type="text"
     class="description-input"
     v-model="description"
+    @keydown.enter="handleEnter"
     />
 </template>
 
@@ -16,7 +17,7 @@ interface State {
 export default defineComponent({
   name: 'DescriptionInput',
 
-  setup() {
+  setup(_, context) {
     const state = reactive<State>({
       description: ''
     });
@@ -27,10 +28,15 @@ export default defineComponent({
       state.description = description;
     };
 
+    const handleEnter = () => {
+      context.emit('index-input', state.description);
+    };
+
     return {
       ...toRefs(state),
       getDescription,
-      setDescription
+      setDescription,
+      handleEnter
     }
   }
 })
