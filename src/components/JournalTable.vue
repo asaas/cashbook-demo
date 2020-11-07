@@ -81,7 +81,7 @@ export default defineComponent({
           corrAccountName: '現金',
           description: '自科目=仕入',
           amount: '6000'
-        },
+        }
       ]
     });
 
@@ -108,7 +108,7 @@ th {
 }
 
 th:nth-child(1), td:nth-child(1) {
-  width: 300px;
+  width: 400px;
 }
 
 th:nth-child(2), td:nth-child(2) {

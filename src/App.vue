@@ -27,6 +27,8 @@
     <v-spacer width="10px" />
     <journal-form-submit-button />
   </div>
+  <v-spacer height="30px" />
+  <journal-template-table />
 </template>
 
 <script lang="ts">
@@ -37,6 +39,7 @@ import JournalTable from './components/JournalTable.vue'
 import DescriptionInput from './components/DescriptionInput.vue'
 import AmountInput from './components/AmountInput.vue'
 import JournalFormSubmitButton from './components/JournalFormSubmitButton.vue'
+import JournalTemplateTable from './components/JournalTemplateTable.vue'
 import VSpacer from './components/VSpacer.vue'
 
 export default defineComponent({
@@ -48,6 +51,7 @@ export default defineComponent({
     DescriptionInput,
     AmountInput,
     JournalFormSubmitButton,
+    JournalTemplateTable,
     VSpacer
   }
 });
