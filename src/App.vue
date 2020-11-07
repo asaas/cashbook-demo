@@ -17,6 +17,11 @@
       <div>相手科目</div>
       <account-select />
     </div>
+    <v-spacer width="10px" />
+    <div class="amount">
+      <div>金額</div>
+      <amount-input />
+    </div>
   </div>
 </template>
 
@@ -25,6 +30,7 @@ import { defineComponent } from 'vue';
 
 import AccountSelect from './components/AccountSelect.vue'
 import DescriptionInput from './components/DescriptionInput.vue'
+import AmountInput from './components/AmountInput.vue'
 import VSpacer from './components/VSpacer.vue'
 
 export default defineComponent({
@@ -33,6 +39,7 @@ export default defineComponent({
   components: {
     AccountSelect,
     DescriptionInput,
+    AmountInput,
     VSpacer
   }
 });
