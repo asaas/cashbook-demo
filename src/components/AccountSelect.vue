@@ -1,22 +1,23 @@
 <template>
-  <select class="account-select">
+  <select class="account-select" v-model="currentAccountId">
     <option v-for="a in accounts" :value="a.id" :key="a.id">{{a.name}}</option>
   </select>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, reactive, toRefs, watch } from 'vue';
 
 import { Account } from '../types/account';
 
 interface State {
   accounts: readonly Account[];
+  currentAccountId: number;
 }
 
 export default defineComponent({
   name: 'AccountSelect',
 
-  setup() {
+  setup(_, context) {
     const state = reactive<State>({
       accounts: [
         { id: 1, name: '現金' },
@@ -25,11 +26,22 @@ export default defineComponent({
         { id: 4, name: '仕入' },
         { id: 5, name: '給料' },
         { id: 6, name: '雑収入' }
-      ]
+      ],
+      currentAccountId: 1
     });
 
+    const getCurrentAccountId = () => state.currentAccountId;
+
+    watch(
+      () => state.currentAccountId,
+      currentAccountId => {
+        context.emit('account-change', currentAccountId);
+      }
+    );
+
     return {
-      ...toRefs(state)
+      ...toRefs(state),
+      getCurrentAccountId
     };
   }
 })

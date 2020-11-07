@@ -4,10 +4,13 @@
   <div class="self-account">
     <div>自科目</div>
     <v-spacer width="5px" />
-    <account-select />
+    <account-select
+      ref="selfAccount"
+      @account-change="handleSelfAccountChange"
+      />
   </div>
   <v-spacer height="30px" />
-  <journal-table />
+  <journal-table ref="journals" />
   <v-spacer height="30px" />
   <div class="journal-form">
     <div class="description">
@@ -32,7 +35,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { defineComponent, ref, nextTick } from 'vue';
 
 import AccountSelect from './components/AccountSelect.vue'
 import JournalTable from './components/JournalTable.vue'
@@ -53,6 +58,27 @@ export default defineComponent({
     JournalFormSubmitButton,
     JournalTemplateTable,
     VSpacer
+  },
+
+  setup() {
+    const selfAccount = ref(null);
+    const journals = ref(null);
+
+    const handleSelfAccountChange = (selfAccountId: number) => {
+      (journals.value as any).filterJournalsBySelfAccountId(selfAccountId);
+    };
+
+    nextTick(() => {
+      const selfAccountId = (selfAccount.value as any).getCurrentAccountId();
+
+      (journals.value as any).filterJournalsBySelfAccountId(selfAccountId);
+    });
+
+    return {
+      selfAccount,
+      journals,
+      handleSelfAccountChange
+    };
   }
 });
 </script>

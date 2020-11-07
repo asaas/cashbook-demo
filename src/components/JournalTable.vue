@@ -5,7 +5,7 @@
       <th>相手科目</th>
       <th>金額</th>
     </tr>
-    <tr v-for="j in journals" :key="j.id">
+    <tr v-for="j in filteredJournals" :key="j.id">
       <td>{{j.description}}</td>
       <td>{{j.corrAccountName}}</td>
       <td>{{j.amount}}</td>
@@ -20,6 +20,7 @@ import { Journal } from '../types/journal';
 
 interface State {
   journals: Journal[];
+  filteredJournals: Journal[];
 }
 
 export default defineComponent({
@@ -82,11 +83,17 @@ export default defineComponent({
           description: '自科目=仕入',
           amount: '6000'
         }
-      ]
+      ],
+      filteredJournals: []
     });
 
+    const filterJournalsBySelfAccountId = (selfAccountId: number) => {
+      state.filteredJournals = state.journals.filter(_ => _.selfAccountId === selfAccountId);
+    };
+
     return {
-      ...toRefs(state)
+      ...toRefs(state),
+      filterJournalsBySelfAccountId
     };
   }
 })
