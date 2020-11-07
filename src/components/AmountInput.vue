@@ -7,31 +7,31 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
-
-interface State {
-  amount: string;
-}
+import { defineComponent, PropType, computed } from 'vue';
 
 export default defineComponent({
   name: 'AmountInput',
 
-  setup() {
-    const state = reactive<State>({
-      amount: ''
+  props: {
+    modelValue: {
+      type: String as PropType<string>,
+      required: true
+    }
+  },
+
+  setup(props, context) {
+    const amount = computed({
+      get: () => props.modelValue,
+      set: (value: string) => {
+        if (value !== props.modelValue) {
+          context.emit('update:modelValue', value);
+        }
+      }
     });
 
-    const getAmount = () => state.amount;
-
-    const setAmount = (amount: string) => {
-      state.amount = amount;
-    };
-
     return {
-      ...toRefs(state),
-      getAmount,
-      setAmount
-    }
+      amount
+    };
   }
 })
 </script>

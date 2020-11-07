@@ -13,27 +13,29 @@
 <script lang="ts">
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { defineComponent, reactive, ref, toRefs } from 'vue';
-
-interface State {
-  description: string;
-}
+import { defineComponent, PropType, ref, computed } from 'vue';
 
 export default defineComponent({
   name: 'DescriptionInput',
 
-  setup(_, context) {
+  props: {
+    modelValue: {
+      type: String as PropType<string>,
+      required: true
+    }
+  },
+
+  setup(props, context) {
     const input = ref(null);
 
-    const state = reactive<State>({
-      description: ''
+    const description = computed({
+      get: () => props.modelValue,
+      set: (value: string) => {
+        if (value !== props.modelValue) {
+          context.emit('update:modelValue', value);
+        }
+      }
     });
-
-    const getDescription = () => state.description;
-
-    const setDescription = (description: string) => {
-      state.description = description;
-    };
 
     const handleFocus = () => {
       context.emit('description-input-focus');
@@ -43,24 +45,22 @@ export default defineComponent({
       context.emit('description-input-blur');
     };
 
+    const handleEnter = () => {
+      context.emit('index-input', description.value);
+    };
+
     const focus = () => {
       (input.value as any).focus();
     };
 
-    const handleEnter = () => {
-      context.emit('index-input', state.description);
-    };
-
     return {
       input,
-      ...toRefs(state),
-      getDescription,
-      setDescription,
+      description,
       handleFocus,
       handleBlur,
-      focus,
-      handleEnter
-    }
+      handleEnter,
+      focus
+    };
   }
 })
 </script>

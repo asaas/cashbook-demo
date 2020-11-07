@@ -5,51 +5,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs, watch } from 'vue';
+import { defineComponent, PropType, computed } from 'vue';
 
 import { Account } from '../types/account';
-
-interface State {
-  accounts: readonly Account[];
-  currentAccountId: number;
-}
 
 export default defineComponent({
   name: 'AccountSelect',
 
-  setup(_, context) {
-    const state = reactive<State>({
-      accounts: [
-        { id: 1, name: '現金' },
-        { id: 2, name: '預金' },
-        { id: 3, name: '売上' },
-        { id: 4, name: '仕入' },
-        { id: 5, name: '給料' },
-        { id: 6, name: '雑収入' }
-      ],
-      currentAccountId: 1
+  props: {
+    accounts: {
+      type: Array as PropType<readonly Account[]>,
+      required: true
+    },
+    modelValue: {
+      type: Number as PropType<number>,
+      required: true
+    }
+  },
+
+  setup(props, context) {
+    const currentAccountId = computed({
+      get: () => props.modelValue,
+      set: (value: number) => {
+        if (value !== props.modelValue) {
+          context.emit('update:modelValue', value);
+        }
+      }
     });
 
-    const getAccountId = () => state.currentAccountId;
-
-    const getAccount = () => state.accounts.find(_ => _.id === state.currentAccountId);
-
-    const setAccountId = (id: number) => {
-      state.currentAccountId = id;
-    };
-
-    watch(
-      () => state.currentAccountId,
-      currentAccountId => {
-        context.emit('account-change', currentAccountId);
-      }
-    );
-
     return {
-      ...toRefs(state),
-      getAccountId,
-      getAccount,
-      setAccountId
+      currentAccountId
     };
   }
 })
