@@ -7,6 +7,8 @@
     <account-select />
   </div>
   <v-spacer height="30px" />
+  <journal-table />
+  <v-spacer height="30px" />
   <div class="journal-form">
     <div class="description">
       <div>摘要</div>
@@ -31,6 +33,7 @@
 import { defineComponent } from 'vue';
 
 import AccountSelect from './components/AccountSelect.vue'
+import JournalTable from './components/JournalTable.vue'
 import DescriptionInput from './components/DescriptionInput.vue'
 import AmountInput from './components/AmountInput.vue'
 import JournalFormSubmitButton from './components/JournalFormSubmitButton.vue'
@@ -41,6 +44,7 @@ export default defineComponent({
 
   components: {
     AccountSelect,
+    JournalTable,
     DescriptionInput,
     AmountInput,
     JournalFormSubmitButton,
@@ -56,6 +60,7 @@ export default defineComponent({
 
 :root {
   --font-size: 15px;
+  font-size: var(--font-size);
 }
 
 .heading {

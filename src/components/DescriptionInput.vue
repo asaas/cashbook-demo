@@ -12,6 +12,7 @@ export default defineComponent({
 
 <style scoped>
 .description-input {
+  width: 300px;
   padding: 5px;
   font-size: var(--font-size);
 }

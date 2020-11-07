@@ -13,6 +13,6 @@ export default defineComponent({
 <style scoped>
 .journal-form-submit-button {
   width: 100px;
-  padding: 2px;
+  font-size: var(--font-size);
 }
 </style>
