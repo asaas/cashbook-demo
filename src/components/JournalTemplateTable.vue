@@ -1,5 +1,5 @@
 <template>
-  <table class="journal-template-table">
+  <table class="journal-template-table" v-if="visibilityState">
     <tr v-for="(jt, i) in filteredJournalTemplates" :key="jt.id">
       <td @click="handleItemClick(jt)">{{`-${i + 1} ${jt.description}`}}</td>
     </tr>
@@ -14,6 +14,8 @@ import { JournalTemplate } from '../types/journal-template';
 interface State {
   journalTemplates: JournalTemplate[];
   filteredJournalTemplates: JournalTemplate[];
+  visibilityState: boolean;
+  timeoutId: number | null;
 }
 
 export default defineComponent({
@@ -65,8 +67,24 @@ export default defineComponent({
           amount: '6000'
         }
       ],
-      filteredJournalTemplates: []
+      filteredJournalTemplates: [],
+      visibilityState: false,
+      timeoutId: null
     });
+
+    const show = () => {
+      if (state.timeoutId) {
+        clearTimeout(state.timeoutId);
+      }
+
+      state.visibilityState = true;
+    };
+
+    const hide = () => {
+      state.timeoutId = setTimeout(() => {
+        state.visibilityState = false;
+      }, 100);
+    };
 
     const filterJournalTemplatesBySelfAccountId = (selfAccountId: number) => {
       state.filteredJournalTemplates =
@@ -83,6 +101,8 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      show,
+      hide,
       filterJournalTemplatesBySelfAccountId,
       findJournalTemplatesByIndex,
       handleItemClick

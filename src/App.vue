@@ -17,6 +17,8 @@
       <div>摘要</div>
       <description-input
         ref="descriptionInput"
+        @description-input-focus="handleDescriptionInputFocus"
+        @description-input-blur="handleDescriptionInputBlur"
         @index-input="handleIndexInput"
         />
     </div>
@@ -103,10 +105,20 @@ export default defineComponent({
       (amountInput.value as any).setAmount('');
     };
 
+    const handleDescriptionInputFocus = () => {
+      (templateTable.value as any).show();
+    };
+
+    const handleDescriptionInputBlur = () => {
+      (templateTable.value as any).hide();
+    };
+
     const setTemplateToForm = (item: JournalTemplate) => {
       (descriptionInput.value as any).setDescription(item.description);
       (corrAccountSelect.value as any).setAccountId(item.corrAccountId);
       (amountInput.value as any).setAmount(item.amount);
+
+      (descriptionInput.value as any).focus();
     };
 
     const handleItemSelect = (item: JournalTemplate) => {
@@ -140,6 +152,8 @@ export default defineComponent({
       templateTable,
       handleSelfAccountChange,
       handleSubmit,
+      handleDescriptionInputFocus,
+      handleDescriptionInputBlur,
       handleItemSelect,
       handleIndexInput
     };
@@ -155,6 +169,7 @@ export default defineComponent({
 :root {
   --font-size: 15px;
   font-size: var(--font-size);
+  line-height: 1.5;
 }
 
 .heading {
