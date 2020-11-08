@@ -1,7 +1,7 @@
 <template>
   <table class="journal-template-table" v-if="visible_">
     <tr v-for="(jt, i) in journalTemplates" :key="jt.id">
-      <td @click="handleItemClick(jt)">{{`-${i + 1} ${jt.description}`}}</td>
+      <td @click="handleItemClick(jt.id)">{{`-${i + 1} ${jt.description}`}}</td>
     </tr>
   </table>
 </template>
@@ -53,8 +53,8 @@ export default defineComponent({
       }
     );
 
-    const handleItemClick = (item: JournalTemplate) => {
-      context.emit('item-select', item);
+    const handleItemClick = (id: number) => {
+      context.emit('item-select', id);
     };
 
     return {

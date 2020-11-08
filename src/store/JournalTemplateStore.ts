@@ -22,6 +22,10 @@ export class JournalTemplateStore {
       this.state.journalTemplates.filter(_ => _.selfAccountId === selfAccountId);
   }
 
+  findItemById(id: number): JournalTemplate | null {
+    return this.state.journalTemplates.find(_ => _.id === id) ?? null;
+  }
+
   findItemByIndex(index: string): JournalTemplate | null {
     return this.state.filteredJournalTemplates.find((_, i) => `-${i + 1}` === index) ?? null;
   }

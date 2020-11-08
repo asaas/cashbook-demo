@@ -71,7 +71,6 @@ import { criteriaStore } from './store/CriteriaStore';
 import { journalFormStore  } from './store/JournalFormStore';
 import { journalStore } from './store/JournalStore';
 import { journalTemplateStore } from './store/JournalTemplateStore';
-import { JournalTemplate } from './types/journal-template';
 
 export default defineComponent({
   name: 'App',
@@ -142,8 +141,12 @@ export default defineComponent({
       journalTemplateStore.hideTemplateTable();
     };
 
-    const handleItemSelect = (item: JournalTemplate) => {
-      journalFormStore.setTemplateToForm(item);
+    const handleItemSelect = (id: number) => {
+      const item = journalTemplateStore.findItemById(id);
+
+      if (item) {
+        journalFormStore.setTemplateToForm(item);
+      }
     };
 
     const handleIndexInput = (index: string) => {
