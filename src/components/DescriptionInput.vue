@@ -3,7 +3,7 @@
     type="text"
     ref="input"
     class="description-input"
-    v-model="description"
+    v-model="description_"
     @focus="handleFocus"
     @blur="handleBlur"
     @keydown.enter="handleEnter"
@@ -19,7 +19,7 @@ export default defineComponent({
   name: 'DescriptionInput',
 
   props: {
-    modelValue: {
+    description: {
       type: String as PropType<string>,
       required: true
     }
@@ -28,11 +28,11 @@ export default defineComponent({
   setup(props, context) {
     const input = ref(null);
 
-    const description = computed({
-      get: () => props.modelValue,
+    const description_ = computed({
+      get: () => props.description,
       set: (value: string) => {
-        if (value !== props.modelValue) {
-          context.emit('update:modelValue', value);
+        if (value !== props.description) {
+          context.emit('description-change', value);
         }
       }
     });
@@ -46,7 +46,7 @@ export default defineComponent({
     };
 
     const handleEnter = () => {
-      context.emit('index-input', description.value);
+      context.emit('index-input', description_.value);
     };
 
     const focus = () => {
@@ -55,7 +55,7 @@ export default defineComponent({
 
     return {
       input,
-      description,
+      description_,
       handleFocus,
       handleBlur,
       handleEnter,

@@ -1,5 +1,5 @@
 <template>
-  <select class="account-select" v-model="currentAccountId">
+  <select class="account-select" v-model="accountId_">
     <option v-for="a in accounts" :value="a.id" :key="a.id">{{a.name}}</option>
   </select>
 </template>
@@ -17,24 +17,24 @@ export default defineComponent({
       type: Array as PropType<readonly Account[]>,
       required: true
     },
-    modelValue: {
+    accountId: {
       type: Number as PropType<number>,
       required: true
     }
   },
 
   setup(props, context) {
-    const currentAccountId = computed({
-      get: () => props.modelValue,
+    const accountId_ = computed({
+      get: () => props.accountId,
       set: (value: number) => {
-        if (value !== props.modelValue) {
-          context.emit('update:modelValue', value);
+        if (value !== props.accountId) {
+          context.emit('account-change', value);
         }
       }
     });
 
     return {
-      currentAccountId
+      accountId_
     };
   }
 })

@@ -2,7 +2,7 @@
   <input
     type="text"
     class="amount-input"
-    v-model="amount"
+    v-model="amount_"
     />
 </template>
 
@@ -13,24 +13,24 @@ export default defineComponent({
   name: 'AmountInput',
 
   props: {
-    modelValue: {
+    amount: {
       type: String as PropType<string>,
       required: true
     }
   },
 
   setup(props, context) {
-    const amount = computed({
-      get: () => props.modelValue,
+    const amount_ = computed({
+      get: () => props.amount,
       set: (value: string) => {
-        if (value !== props.modelValue) {
-          context.emit('update:modelValue', value);
+        if (value !== props.amount) {
+          context.emit('amount-change', value);
         }
       }
     });
 
     return {
-      amount
+      amount_
     };
   }
 })
