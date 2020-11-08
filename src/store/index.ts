@@ -105,8 +105,12 @@ export class Store {
     this._state.focusDescriptionInput = focusDescriptionInput;
   }
 
-  handleItemSelect(item: JournalTemplate) {
-    this.setTemplateToForm(item);
+  handleItemSelect(id: number) {
+    const item = this.state.journalTemplates.find(_ => _.id === id);
+
+    if (item) {
+      this.setTemplateToForm(item);
+    }
   }
 
   handleIndexInput(index: string) {
