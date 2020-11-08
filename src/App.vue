@@ -268,8 +268,12 @@ export default defineComponent({
       (descriptionInput.value as any).focus();
     };
 
-    const handleItemSelect = (item: JournalTemplate) => {
-      setTemplateToForm(item);
+    const handleItemSelect = (id: number) => {
+      const item = state.journalTemplates.find(_ => _.id === id);
+
+      if (item) {
+        setTemplateToForm(item);
+      }
     };
 
     const handleIndexInput = (index: string) => {
