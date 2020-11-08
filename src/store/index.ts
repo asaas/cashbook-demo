@@ -137,7 +137,7 @@ export class Store {
 
   private addJournal(journal: Omit<Journal, 'id'>) {
     this._state.journals =
-    [...this._state.journals, { ...journal, id: this._state.journals.length + 1 }];
+    [...this.state.journals, { ...journal, id: this.state.journals.length + 1 }];
   }
 
   private clearForm() {
@@ -151,8 +151,8 @@ export class Store {
     this._state.corrAccountId = item.corrAccountId;
     this._state.amount = item.amount;
 
-    if (this._state.focusDescriptionInput) {
-      this._state.focusDescriptionInput();
+    if (this.state.focusDescriptionInput) {
+      this.state.focusDescriptionInput();
     }
   }
 }
