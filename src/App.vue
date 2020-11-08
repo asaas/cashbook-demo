@@ -66,7 +66,12 @@ import AmountInput from './components/AmountInput.vue'
 import JournalFormSubmitButton from './components/JournalFormSubmitButton.vue'
 import JournalTemplateTable from './components/JournalTemplateTable.vue'
 import VSpacer from './components/VSpacer.vue'
-import { Store, initialState } from './store';
+import { accountStore } from './store/AccountStore';
+import { criteriaStore } from './store/CriteriaStore';
+import { journalFormStore  } from './store/JournalFormStore';
+import { journalStore } from './store/JournalStore';
+import { journalTemplateStore } from './store/JournalTemplateStore';
+import { JournalTemplate } from './types/journal-template';
 
 export default defineComponent({
   name: 'App',
@@ -82,26 +87,102 @@ export default defineComponent({
   },
 
   setup() {
-    const store = new Store(initialState);
-
     const descriptionInput = ref(null);
 
-    store.setFocusDescriptionInput(() => {
+    const handleSelfAccountChange = (selfAccountId: number) => {
+      criteriaStore.setSelfAccountId(selfAccountId);
+
+      journalStore.filterJournalsBySelfAccountId(selfAccountId);
+
+      journalTemplateStore.filterJournalTemplatesBySelfAccountId(selfAccountId);
+    };
+
+    const handleDescriptionChange = (description: string) => {
+      journalFormStore.setDescription(description);
+    };
+
+    const handleCorrAccountChange = (corrAccountId: number) => {
+      journalFormStore.setCorrAccountId(corrAccountId);
+    };
+
+    const handleAmountChange = (amount: string) => {
+      journalFormStore.setAmount(amount);
+    };
+
+    const handleSubmit = () => {
+      const { selfAccountId } = criteriaStore.state;
+      const {
+        description,
+        corrAccountId,
+        amount
+      } = journalFormStore.state;
+
+      const selfAccount = accountStore.findAccountById(selfAccountId);
+      const corrAccount = accountStore.findAccountById(corrAccountId);
+
+      journalStore.addJournal({
+        selfAccountId: selfAccount.id,
+        selfAccountName: selfAccount.name,
+        corrAccountId: corrAccount.id,
+        corrAccountName: corrAccount.name,
+        description,
+        amount
+      });
+
+      journalStore.filterJournalsBySelfAccountId(selfAccountId);
+
+      journalFormStore.clearForm();
+    };
+
+    const handleDescriptionInputFocus = () => {
+      journalTemplateStore.showTemplateTable();
+    };
+
+    const handleDescriptionInputBlur = () => {
+      journalTemplateStore.hideTemplateTable();
+    };
+
+    const handleItemSelect = (item: JournalTemplate) => {
+      journalFormStore.setTemplateToForm(item);
+    };
+
+    const handleIndexInput = (index: string) => {
+      const item = journalTemplateStore.findItemByIndex(index);
+
+      if (item) {
+        journalFormStore.setTemplateToForm(item);
+      }
+    };
+
+    journalFormStore.setFocusDescriptionInput(() => {
       (descriptionInput.value as any).focus();
-    })
+    });
+
+    const init = () => {
+      const { selfAccountId } = criteriaStore.state;
+
+      journalStore.filterJournalsBySelfAccountId(selfAccountId);
+      journalTemplateStore.filterJournalTemplatesBySelfAccountId(selfAccountId);
+    };
+
+    init();
 
     return {
       descriptionInput,
-      ...toRefs(store.state),
-      handleSelfAccountChange: store.handleSelfAccountChange.bind(store),
-      handleDescriptionChange: store.handleDescriptionChange.bind(store),
-      handleCorrAccountChange: store.handleCorrAccountChange.bind(store),
-      handleAmountChange: store.handleAmountChange.bind(store),
-      handleSubmit: store.handleSubmit.bind(store),
-      handleDescriptionInputFocus: store.handleDescriptionInputFocus.bind(store),
-      handleDescriptionInputBlur: store.handleDescriptionInputBlur.bind(store),
-      handleItemSelect: store.handleItemSelect.bind(store),
-      handleIndexInput: store.handleIndexInput.bind(store)
+      ...toRefs(accountStore.state),
+      ...toRefs(criteriaStore.state),
+      ...toRefs(journalStore.state),
+      ...toRefs(journalFormStore.state),
+      ...toRefs(journalTemplateStore.state),
+      handleSelfAccountChange,
+      handleDescriptionChange,
+      handleCorrAccountChange,
+      handleAmountChange,
+      handleSubmit,
+      handleDescriptionInputFocus,
+      handleDescriptionInputBlur,
+      handleItemSelect,
+      handleIndexInput
     };
   }
 });
