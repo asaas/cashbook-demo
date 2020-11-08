@@ -1,5 +1,6 @@
 import { reactive } from 'vue';
 
+import Action from './Action';
 import { Journal } from '../types/journal';
 
 export interface State {
@@ -16,14 +17,29 @@ export class JournalStore {
     this.state = this._state;
   }
 
-  filterJournalsBySelfAccountId(selfAccountId: number) {
-    this._state.filteredJournals =
-      this.state.journals.filter(_ => _.selfAccountId === selfAccountId);
+  update(action: Action) {
+    switch (action.type) {
+      case 'ChangeSelfAccount':
+        this.filterJournalsBySelfAccountId(action.selfAccountId);
+        break;
+
+      case 'AddJournal':
+        this._state.journals =
+          [...this.state.journals, { ...action.journal, id: this.state.journals.length + 1 }];
+        break;
+
+      case 'FilterJournals':
+        this.filterJournalsBySelfAccountId(action.selfAccountId);
+        break;
+
+      default:
+        break;
+    }
   }
 
-  addJournal(journal: Omit<Journal, 'id'>) {
-    this._state.journals =
-      [...this.state.journals, { ...journal, id: this.state.journals.length + 1 }];
+  private filterJournalsBySelfAccountId(selfAccountId: number) {
+    this._state.filteredJournals =
+      this.state.journals.filter(_ => _.selfAccountId === selfAccountId);
   }
 }
 

@@ -1,5 +1,6 @@
 import { reactive } from 'vue';
 
+import Action from './Action';
 import { JournalTemplate } from '../types/journal-template';
 
 export interface State {
@@ -18,36 +19,35 @@ export class JournalFormStore {
     this.state = this._state;
   }
 
-  setDescription(description: string) {
-    this._state.description = description;
-  }
+  update(action: Action) {
+    switch (action.type) {
+      case 'ChangeDescription':
+        this._state.description = action.description;
+        break;
 
-  setCorrAccountId(id: number) {
-    this._state.corrAccountId = id;
-  }
+      case 'ChangeCorrAccount':
+        this._state.corrAccountId = action.corrAccountId;
+        break;
 
-  setAmount(amount: string) {
-    this._state.amount = amount;
-  }
+      case 'ChangeAmount':
+        this._state.amount = action.amount;
+        break;
 
-  setTemplateToForm(item: JournalTemplate) {
-    this._state.description = item.description;
-    this._state.corrAccountId = item.corrAccountId;
-    this._state.amount = item.amount;
+      case 'ApplyJournalTemplate':
+        this._state.description = action.template.description;
+        this._state.corrAccountId = action.template.corrAccountId;
+        this._state.amount = action.template.amount;
+        break;
 
-    if (this.state.focusDescriptionInput) {
-      this.state.focusDescriptionInput();
+      case 'SubmitJournalForm':
+        this._state.description = '';
+        this._state.corrAccountId = 1;
+        this._state.amount = '';
+        break;
+
+      default:
+        break;
     }
-  }
-
-  clearForm() {
-    this._state.description = ''
-    this._state.corrAccountId = 1
-    this._state.amount = ''
-  }
-
-  setFocusDescriptionInput(focusDescriptionInput: () => void) {
-    this._state.focusDescriptionInput = focusDescriptionInput;
   }
 }
 

@@ -1,11 +1,12 @@
 import { reactive } from 'vue';
 
+import Action from './Action';
 import { JournalTemplate } from '../types/journal-template';
 
 export interface State {
   journalTemplates: readonly JournalTemplate[];
   filteredJournalTemplates: readonly JournalTemplate[];
-  templateTableVisible: boolean;
+  templatesVisible: boolean;
 }
 
 export class JournalTemplateStore {
@@ -17,25 +18,36 @@ export class JournalTemplateStore {
     this.state = this._state;
   }
 
-  filterJournalTemplatesBySelfAccountId(selfAccountId: number) {
-    this._state.filteredJournalTemplates =
-      this.state.journalTemplates.filter(_ => _.selfAccountId === selfAccountId);
+  update(action: Action) {
+    switch (action.type) {
+      case 'ChangeSelfAccount':
+        this.filterJournalTemplatesBySelfAccountId(action.selfAccountId);
+        break;
+
+      case 'ShowJournalTemplates':
+        this._state.templatesVisible = true;
+        break;
+
+      case 'HideJournalTemplates':
+        this._state.templatesVisible = false;
+        break;
+
+      default:
+        break;
+    }
   }
 
-  findItemById(id: number): JournalTemplate | null {
+  findJournalTemplateById(id: number): JournalTemplate | null {
     return this.state.journalTemplates.find(_ => _.id === id) ?? null;
   }
 
-  findItemByIndex(index: string): JournalTemplate | null {
+  findJournalTemplateByIndex(index: string): JournalTemplate | null {
     return this.state.filteredJournalTemplates.find((_, i) => `-${i + 1}` === index) ?? null;
   }
 
-  showTemplateTable() {
-    this._state.templateTableVisible = true;
-  }
-
-  hideTemplateTable() {
-    this._state.templateTableVisible = false;
+  private filterJournalTemplatesBySelfAccountId(selfAccountId: number) {
+    this._state.filteredJournalTemplates =
+      this.state.journalTemplates.filter(_ => _.selfAccountId === selfAccountId);
   }
 }
 
@@ -85,7 +97,7 @@ export const initialState = reactive<State>({
     }
   ],
   filteredJournalTemplates: [],
-  templateTableVisible: false
+  templatesVisible: false
 });
 
 export const journalTemplateStore = new JournalTemplateStore(initialState);

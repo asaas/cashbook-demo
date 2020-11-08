@@ -49,7 +49,7 @@
   <journal-template-table
     ref="templateTable"
     :journal-templates="filteredJournalTemplates"
-    :visible="templateTableVisible"
+    :visible="templatesVisible"
     @item-select="handleItemSelect"
     />
 </template>
@@ -66,6 +66,7 @@ import AmountInput from './components/AmountInput.vue'
 import JournalFormSubmitButton from './components/JournalFormSubmitButton.vue'
 import JournalTemplateTable from './components/JournalTemplateTable.vue'
 import VSpacer from './components/VSpacer.vue'
+import { dispatcher } from './store/Dispatcher';
 import { accountStore } from './store/AccountStore';
 import { criteriaStore } from './store/CriteriaStore';
 import { journalFormStore  } from './store/JournalFormStore';
@@ -89,83 +90,74 @@ export default defineComponent({
     const descriptionInput = ref(null);
 
     const handleSelfAccountChange = (selfAccountId: number) => {
-      criteriaStore.setSelfAccountId(selfAccountId);
-
-      journalStore.filterJournalsBySelfAccountId(selfAccountId);
-
-      journalTemplateStore.filterJournalTemplatesBySelfAccountId(selfAccountId);
+      dispatcher.dispatch({
+        type: 'ChangeSelfAccount',
+        selfAccountId
+      });
     };
 
     const handleDescriptionChange = (description: string) => {
-      journalFormStore.setDescription(description);
+      dispatcher.dispatch({
+        type: 'ChangeDescription',
+        description
+      });
     };
 
     const handleCorrAccountChange = (corrAccountId: number) => {
-      journalFormStore.setCorrAccountId(corrAccountId);
+      dispatcher.dispatch({
+        type: 'ChangeCorrAccount',
+        corrAccountId
+      });
     };
 
     const handleAmountChange = (amount: string) => {
-      journalFormStore.setAmount(amount);
+      dispatcher.dispatch({
+        type: 'ChangeAmount',
+        amount
+      });
     };
 
     const handleSubmit = () => {
-      const { selfAccountId } = criteriaStore.state;
-      const {
-        description,
-        corrAccountId,
-        amount
-      } = journalFormStore.state;
-
-      const selfAccount = accountStore.findAccountById(selfAccountId);
-      const corrAccount = accountStore.findAccountById(corrAccountId);
-
-      journalStore.addJournal({
-        selfAccountId: selfAccount.id,
-        selfAccountName: selfAccount.name,
-        corrAccountId: corrAccount.id,
-        corrAccountName: corrAccount.name,
-        description,
-        amount
+      dispatcher.dispatch({
+        type: 'SubmitJournalForm'
       });
-
-      journalStore.filterJournalsBySelfAccountId(selfAccountId);
-
-      journalFormStore.clearForm();
     };
 
     const handleDescriptionInputFocus = () => {
-      journalTemplateStore.showTemplateTable();
+      dispatcher.dispatch({
+        type: 'ShowJournalTemplates'
+      });
     };
 
     const handleDescriptionInputBlur = () => {
-      journalTemplateStore.hideTemplateTable();
+      dispatcher.dispatch({
+        type: 'HideJournalTemplates'
+      });
     };
 
     const handleItemSelect = (id: number) => {
-      const item = journalTemplateStore.findItemById(id);
+      dispatcher.dispatch({
+        type: 'SelectJournalTemplate',
+        id
+      });
 
-      if (item) {
-        journalFormStore.setTemplateToForm(item);
-      }
+      (descriptionInput.value as any).focus();
     };
 
     const handleIndexInput = (index: string) => {
-      const item = journalTemplateStore.findItemByIndex(index);
-
-      if (item) {
-        journalFormStore.setTemplateToForm(item);
-      }
+      dispatcher.dispatch({
+        type: 'FindJournalTemplateByIndex',
+        index
+      });
     };
-
-    journalFormStore.setFocusDescriptionInput(() => {
-      (descriptionInput.value as any).focus();
-    });
 
     const init = () => {
       const { selfAccountId } = criteriaStore.state;
 
-      journalStore.filterJournalsBySelfAccountId(selfAccountId);
-      journalTemplateStore.filterJournalTemplatesBySelfAccountId(selfAccountId);
+      dispatcher.dispatch({
+        type: 'ChangeSelfAccount',
+        selfAccountId
+      });
     };
 
     init();

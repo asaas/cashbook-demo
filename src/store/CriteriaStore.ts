@@ -1,5 +1,7 @@
 import { reactive } from 'vue';
 
+import Action from './Action';
+
 export interface State {
   selfAccountId: number;
 }
@@ -13,8 +15,15 @@ export class CriteriaStore {
     this.state = this._state;
   }
 
-  setSelfAccountId(id: number) {
-    this._state.selfAccountId = id;
+  update(action: Action) {
+    switch (action.type) {
+      case 'ChangeSelfAccount':
+        this._state.selfAccountId = action.selfAccountId;
+        break;
+
+      default:
+        break;
+    }
   }
 }
 
