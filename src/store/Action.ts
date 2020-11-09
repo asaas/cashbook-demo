@@ -35,7 +35,7 @@ interface SelectJournalTemplate {
 }
 
 interface FindJournalTemplateByIndex {
-  type: 'SelectJournalTemplate';
+  type: 'FindJournalTemplateByIndex';
   index: string;
 }
 
@@ -58,7 +58,11 @@ interface FilterJournals {
   selfAccountId: number;
 }
 
-export default type Action =
+interface ClearJournalForm {
+  type: 'ClearJournalForm';
+}
+
+type Action =
   | ChangeSelfAccount
   | ChangeDescription
   | ChangeCorrAccount
@@ -71,3 +75,6 @@ export default type Action =
   | SubmitJournalForm
   | AddJournal
   | FilterJournals
+  | ClearJournalForm
+
+export default Action

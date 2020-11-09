@@ -5,20 +5,20 @@
     <div>自科目</div>
     <v-spacer width="5px" />
     <account-select
-      :accounts="accounts"
-      :account-id="selfAccountId"
+      :accounts="state.accounts"
+      :account-id="state.criteria.selfAccountId"
       @account-change="handleSelfAccountChange"
       />
   </div>
   <v-spacer height="30px" />
-  <journal-table :journals="filteredJournals" />
+  <journal-table :journals="state.journals.filteredJournals" />
   <v-spacer height="30px" />
   <div class="journal-form">
     <div class="description">
       <div>摘要</div>
       <description-input
         ref="descriptionInput"
-        :description="description"
+        :description="state.journalForm.description"
         @description-change="handleDescriptionChange"
         @description-input-focus="handleDescriptionInputFocus"
         @description-input-blur="handleDescriptionInputBlur"
@@ -29,8 +29,8 @@
     <div class="corr-account">
       <div>相手科目</div>
       <account-select
-        :accounts="accounts"
-        :account-id="corrAccountId"
+        :accounts="state.accounts"
+        :account-id="state.journalForm.corrAccountId"
         @account-change="handleCorrAccountChange"
         />
     </div>
@@ -38,7 +38,7 @@
     <div class="amount">
       <div>金額</div>
       <amount-input
-        :amount="amount"
+        :amount="state.journalForm.amount"
         @amount-change="handleAmountChange"
         />
     </div>
@@ -48,8 +48,8 @@
   <v-spacer height="30px" />
   <journal-template-table
     ref="templateTable"
-    :journal-templates="filteredJournalTemplates"
-    :visible="templatesVisible"
+    :journal-templates="state.journalTemplates.filteredJournalTemplates"
+    :visible="state.journalTemplates.templatesVisible"
     @item-select="handleItemSelect"
     />
 </template>
@@ -57,7 +57,7 @@
 <script lang="ts">
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { defineComponent, ref, toRefs } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import AccountSelect from './components/AccountSelect.vue'
 import JournalTable from './components/JournalTable.vue'
@@ -66,12 +66,7 @@ import AmountInput from './components/AmountInput.vue'
 import JournalFormSubmitButton from './components/JournalFormSubmitButton.vue'
 import JournalTemplateTable from './components/JournalTemplateTable.vue'
 import VSpacer from './components/VSpacer.vue'
-import { dispatcher } from './store/Dispatcher';
-import { accountStore } from './store/AccountStore';
-import { criteriaStore } from './store/CriteriaStore';
-import { journalFormStore  } from './store/JournalFormStore';
-import { journalStore } from './store/JournalStore';
-import { journalTemplateStore } from './store/JournalTemplateStore';
+import store from './store';
 
 export default defineComponent({
   name: 'App',
@@ -89,54 +84,60 @@ export default defineComponent({
   setup() {
     const descriptionInput = ref(null);
 
+    const state = ref(store.getState());
+
+    store.subscribe(() => {
+      state.value = store.getState();
+    });
+
     const handleSelfAccountChange = (selfAccountId: number) => {
-      dispatcher.dispatch({
+      store.dispatch({
         type: 'ChangeSelfAccount',
         selfAccountId
       });
     };
 
     const handleDescriptionChange = (description: string) => {
-      dispatcher.dispatch({
+      store.dispatch({
         type: 'ChangeDescription',
         description
       });
     };
 
     const handleCorrAccountChange = (corrAccountId: number) => {
-      dispatcher.dispatch({
+      store.dispatch({
         type: 'ChangeCorrAccount',
         corrAccountId
       });
     };
 
     const handleAmountChange = (amount: string) => {
-      dispatcher.dispatch({
+      store.dispatch({
         type: 'ChangeAmount',
         amount
       });
     };
 
     const handleSubmit = () => {
-      dispatcher.dispatch({
+      store.dispatch({
         type: 'SubmitJournalForm'
       });
     };
 
     const handleDescriptionInputFocus = () => {
-      dispatcher.dispatch({
+      store.dispatch({
         type: 'ShowJournalTemplates'
       });
     };
 
     const handleDescriptionInputBlur = () => {
-      dispatcher.dispatch({
+      store.dispatch({
         type: 'HideJournalTemplates'
       });
     };
 
     const handleItemSelect = (id: number) => {
-      dispatcher.dispatch({
+      store.dispatch({
         type: 'SelectJournalTemplate',
         id
       });
@@ -145,16 +146,16 @@ export default defineComponent({
     };
 
     const handleIndexInput = (index: string) => {
-      dispatcher.dispatch({
+      store.dispatch({
         type: 'FindJournalTemplateByIndex',
         index
       });
     };
 
     const init = () => {
-      const { selfAccountId } = criteriaStore.state;
+      const { criteria: { selfAccountId } } = store.getState();
 
-      dispatcher.dispatch({
+      store.dispatch({
         type: 'ChangeSelfAccount',
         selfAccountId
       });
@@ -164,11 +165,7 @@ export default defineComponent({
 
     return {
       descriptionInput,
-      ...toRefs(accountStore.state),
-      ...toRefs(criteriaStore.state),
-      ...toRefs(journalStore.state),
-      ...toRefs(journalFormStore.state),
-      ...toRefs(journalTemplateStore.state),
+      state,
       handleSelfAccountChange,
       handleDescriptionChange,
       handleCorrAccountChange,

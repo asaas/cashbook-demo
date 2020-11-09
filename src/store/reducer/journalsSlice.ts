@@ -1,49 +1,12 @@
-import { reactive } from 'vue';
-
-import Action from './Action';
-import { Journal } from '../types/journal';
+import Action from '../Action';
+import { Journal } from '../../types/journal';
 
 export interface State {
   journals: readonly Journal[];
   filteredJournals: readonly Journal[];
 }
 
-export class JournalStore {
-  public state: Readonly<State>;
-  private _state: State;
-
-  constructor(initialState: State) {
-    this._state = reactive(initialState);
-    this.state = this._state;
-  }
-
-  update(action: Action) {
-    switch (action.type) {
-      case 'ChangeSelfAccount':
-        this.filterJournalsBySelfAccountId(action.selfAccountId);
-        break;
-
-      case 'AddJournal':
-        this._state.journals =
-          [...this.state.journals, { ...action.journal, id: this.state.journals.length + 1 }];
-        break;
-
-      case 'FilterJournals':
-        this.filterJournalsBySelfAccountId(action.selfAccountId);
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  private filterJournalsBySelfAccountId(selfAccountId: number) {
-    this._state.filteredJournals =
-      this.state.journals.filter(_ => _.selfAccountId === selfAccountId);
-  }
-}
-
-export const initialState = reactive<State>({
+const initialState = {
   journals: [
     {
       id: 1,
@@ -101,6 +64,46 @@ export const initialState = reactive<State>({
     }
   ],
   filteredJournals: []
-});
+};
 
-export const journalStore = new JournalStore(initialState);
+function filterJournalsBySelfAccountId(
+  selfAccountId: number,
+  journals: readonly Journal[]
+): readonly Journal[] {
+  return journals.filter(_ => _.selfAccountId === selfAccountId);
+}
+
+function addJournal(
+  journalToAdd: Omit<Journal, 'id'>,
+  journals: readonly Journal[]
+): readonly Journal[] {
+  return [...journals, { ...journalToAdd, id: journals.length + 1 }];
+}
+
+export default function journalsReducer(
+  state: State = initialState,
+  action: Action
+): State {
+  switch (action.type) {
+    case 'ChangeSelfAccount':
+      return {
+        ...state,
+        filteredJournals: filterJournalsBySelfAccountId(action.selfAccountId, state.journals)
+      };
+
+    case 'AddJournal':
+      return {
+        ...state,
+        journals: addJournal(action.journal, state.journals),
+      };
+
+    case 'FilterJournals':
+      return {
+        ...state,
+        filteredJournals: filterJournalsBySelfAccountId(action.selfAccountId, state.journals)
+      };
+
+    default:
+      return state;
+  }
+}
