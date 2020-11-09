@@ -8,21 +8,19 @@ export interface State {
 }
 
 export class JournalStore {
-  public state: Readonly<State>;
-  private _state: State;
+  public state: State;
 
   constructor(initialState: State) {
-    this._state = reactive(initialState);
-    this.state = this._state;
+    this.state = reactive(initialState);
   }
 
   filterJournalsBySelfAccountId(selfAccountId: number) {
-    this._state.filteredJournals =
+    this.state.filteredJournals =
       this.state.journals.filter(_ => _.selfAccountId === selfAccountId);
   }
 
   addJournal(journal: Omit<Journal, 'id'>) {
-    this._state.journals =
+    this.state.journals =
       [...this.state.journals, { ...journal, id: this.state.journals.length + 1 }];
   }
 }

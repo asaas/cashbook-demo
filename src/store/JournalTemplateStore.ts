@@ -9,16 +9,14 @@ export interface State {
 }
 
 export class JournalTemplateStore {
-  public state: Readonly<State>;
-  private _state: State;
+  public state: State;
 
   constructor(initialState: State) {
-    this._state = reactive(initialState);
-    this.state = this._state;
+    this.state = reactive(initialState);
   }
 
   filterJournalTemplatesBySelfAccountId(selfAccountId: number) {
-    this._state.filteredJournalTemplates =
+    this.state.filteredJournalTemplates =
       this.state.journalTemplates.filter(_ => _.selfAccountId === selfAccountId);
   }
 
@@ -31,11 +29,11 @@ export class JournalTemplateStore {
   }
 
   showTemplateTable() {
-    this._state.templateTableVisible = true;
+    this.state.templateTableVisible = true;
   }
 
   hideTemplateTable() {
-    this._state.templateTableVisible = false;
+    this.state.templateTableVisible = false;
   }
 }
 

@@ -10,30 +10,28 @@ export interface State {
 }
 
 export class JournalFormStore {
-  public state: Readonly<State>;
-  private _state: State;
+  public state: State;
 
   constructor(initialState: State) {
-    this._state = reactive(initialState);
-    this.state = this._state;
+    this.state = reactive(initialState);
   }
 
   setDescription(description: string) {
-    this._state.description = description;
+    this.state.description = description;
   }
 
   setCorrAccountId(id: number) {
-    this._state.corrAccountId = id;
+    this.state.corrAccountId = id;
   }
 
   setAmount(amount: string) {
-    this._state.amount = amount;
+    this.state.amount = amount;
   }
 
   setTemplateToForm(item: JournalTemplate) {
-    this._state.description = item.description;
-    this._state.corrAccountId = item.corrAccountId;
-    this._state.amount = item.amount;
+    this.state.description = item.description;
+    this.state.corrAccountId = item.corrAccountId;
+    this.state.amount = item.amount;
 
     if (this.state.focusDescriptionInput) {
       this.state.focusDescriptionInput();
@@ -41,13 +39,13 @@ export class JournalFormStore {
   }
 
   clearForm() {
-    this._state.description = ''
-    this._state.corrAccountId = 1
-    this._state.amount = ''
+    this.state.description = ''
+    this.state.corrAccountId = 1
+    this.state.amount = ''
   }
 
   setFocusDescriptionInput(focusDescriptionInput: () => void) {
-    this._state.focusDescriptionInput = focusDescriptionInput;
+    this.state.focusDescriptionInput = focusDescriptionInput;
   }
 }
 

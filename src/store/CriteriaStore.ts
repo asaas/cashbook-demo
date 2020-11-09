@@ -5,16 +5,14 @@ export interface State {
 }
 
 export class CriteriaStore {
-  public state: Readonly<State>;
-  private _state: State;
+  public state: State;
 
   constructor(initialState: State) {
-    this._state = reactive(initialState);
-    this.state = this._state;
+    this.state = reactive(initialState);
   }
 
   setSelfAccountId(id: number) {
-    this._state.selfAccountId = id;
+    this.state.selfAccountId = id;
   }
 }
 

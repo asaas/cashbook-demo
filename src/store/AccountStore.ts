@@ -9,12 +9,10 @@ export interface State {
 }
 
 export class AccountStore {
-  public state: Readonly<State>;
-  private _state: State;
+  public state: State;
 
   constructor(initialState: State) {
-    this._state = reactive(initialState);
-    this.state = this._state;
+    this.state = reactive(initialState);
   }
 
   findAccountById(id: number): Account {
