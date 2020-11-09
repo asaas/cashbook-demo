@@ -9,12 +9,10 @@ export interface State {
 }
 
 export class JournalStore {
-  public state: Readonly<State>;
-  private _state: State;
+  public state: State;
 
   constructor(initialState: State) {
-    this._state = reactive(initialState);
-    this.state = this._state;
+    this.state = reactive(initialState);
   }
 
   update(action: Action) {
@@ -24,7 +22,7 @@ export class JournalStore {
         break;
 
       case 'AddJournal':
-        this._state.journals =
+        this.state.journals =
           [...this.state.journals, { ...action.journal, id: this.state.journals.length + 1 }];
         break;
 
@@ -38,7 +36,7 @@ export class JournalStore {
   }
 
   private filterJournalsBySelfAccountId(selfAccountId: number) {
-    this._state.filteredJournals =
+    this.state.filteredJournals =
       this.state.journals.filter(_ => _.selfAccountId === selfAccountId);
   }
 }

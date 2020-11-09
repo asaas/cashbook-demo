@@ -10,12 +10,10 @@ export interface State {
 }
 
 export class JournalTemplateStore {
-  public state: Readonly<State>;
-  private _state: State;
+  public state: State;
 
   constructor(initialState: State) {
-    this._state = reactive(initialState);
-    this.state = this._state;
+    this.state = reactive(initialState);
   }
 
   update(action: Action) {
@@ -25,11 +23,11 @@ export class JournalTemplateStore {
         break;
 
       case 'ShowJournalTemplates':
-        this._state.templatesVisible = true;
+        this.state.templatesVisible = true;
         break;
 
       case 'HideJournalTemplates':
-        this._state.templatesVisible = false;
+        this.state.templatesVisible = false;
         break;
 
       default:
@@ -46,7 +44,7 @@ export class JournalTemplateStore {
   }
 
   private filterJournalTemplatesBySelfAccountId(selfAccountId: number) {
-    this._state.filteredJournalTemplates =
+    this.state.filteredJournalTemplates =
       this.state.journalTemplates.filter(_ => _.selfAccountId === selfAccountId);
   }
 }

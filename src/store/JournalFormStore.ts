@@ -9,38 +9,36 @@ export interface State {
 }
 
 export class JournalFormStore {
-  public state: Readonly<State>;
-  private _state: State;
+  public state: State;
 
   constructor(initialState: State) {
-    this._state = reactive(initialState);
-    this.state = this._state;
+    this.state = reactive(initialState);
   }
 
   update(action: Action) {
     switch (action.type) {
       case 'ChangeDescription':
-        this._state.description = action.description;
+        this.state.description = action.description;
         break;
 
       case 'ChangeCorrAccount':
-        this._state.corrAccountId = action.corrAccountId;
+        this.state.corrAccountId = action.corrAccountId;
         break;
 
       case 'ChangeAmount':
-        this._state.amount = action.amount;
+        this.state.amount = action.amount;
         break;
 
       case 'ApplyJournalTemplate':
-        this._state.description = action.template.description;
-        this._state.corrAccountId = action.template.corrAccountId;
-        this._state.amount = action.template.amount;
+        this.state.description = action.template.description;
+        this.state.corrAccountId = action.template.corrAccountId;
+        this.state.amount = action.template.amount;
         break;
 
       case 'SubmitJournalForm':
-        this._state.description = '';
-        this._state.corrAccountId = 1;
-        this._state.amount = '';
+        this.state.description = '';
+        this.state.corrAccountId = 1;
+        this.state.amount = '';
         break;
 
       default:

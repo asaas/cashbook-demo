@@ -7,18 +7,16 @@ export interface State {
 }
 
 export class CriteriaStore {
-  public state: Readonly<State>;
-  private _state: State;
+  public state: State;
 
   constructor(initialState: State) {
-    this._state = reactive(initialState);
-    this.state = this._state;
+    this.state = reactive(initialState);
   }
 
   update(action: Action) {
     switch (action.type) {
       case 'ChangeSelfAccount':
-        this._state.selfAccountId = action.selfAccountId;
+        this.state.selfAccountId = action.selfAccountId;
         break;
 
       default:
