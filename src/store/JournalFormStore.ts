@@ -1,13 +1,11 @@
 import { reactive } from 'vue';
 
 import Action from './Action';
-import { JournalTemplate } from '../types/journal-template';
 
 export interface State {
   description: string;
   corrAccountId: number;
   amount: string;
-  focusDescriptionInput: (() => void) | null;
 }
 
 export class JournalFormStore {
@@ -54,8 +52,7 @@ export class JournalFormStore {
 export const initialState = reactive<State>({
   description: '',
   corrAccountId: 1,
-  amount: '',
-  focusDescriptionInput: null
+  amount: ''
 });
 
 export const journalFormStore = new JournalFormStore(initialState);

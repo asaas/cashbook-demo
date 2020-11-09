@@ -59,10 +59,12 @@ dispatcher.register(action => {
     case 'SelectJournalTemplate': {
       const template = journalTemplateStore.findJournalTemplateById(action.id);
 
-      journalFormStore.update({
-        type: 'ApplyJournalTemplate',
-        template
-      });
+      if (template) {
+        journalFormStore.update({
+          type: 'ApplyJournalTemplate',
+          template
+        });
+      }
 
       break;
     }
@@ -70,10 +72,12 @@ dispatcher.register(action => {
     case 'FindJournalTemplateByIndex': {
       const template = journalTemplateStore.findJournalTemplateByIndex(action.index);
 
-      journalFormStore.update({
-        type: 'ApplyJournalTemplate',
-        template
-      });
+      if (template) {
+        journalFormStore.update({
+          type: 'ApplyJournalTemplate',
+          template
+        });
+      }
 
       break;
     }
