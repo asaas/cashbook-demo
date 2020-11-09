@@ -23,12 +23,10 @@ export interface State {
 }
 
 export class Store {
-  public state: Readonly<State>;
-  private _state: State;
+  public state: State;
 
   constructor(initialState: State) {
-    this._state = reactive(initialState);
-    this.state = this._state;
+    this.state = reactive(initialState);
 
     this.computeFilteredJournals();
     this.computeFilteredJournalTemplates();
@@ -58,19 +56,19 @@ export class Store {
   }
 
   handleSelfAccountChange(id: number) {
-    this._state.selfAccountId = id;
+    this.state.selfAccountId = id;
   }
 
   handleDescriptionChange(description: string) {
-    this._state.description = description;
+    this.state.description = description;
   }
 
   handleCorrAccountChange(id: number) {
-    this._state.corrAccountId = id;
+    this.state.corrAccountId = id;
   }
 
   handleAmountChange(amount: string) {
-    this._state.amount = amount;
+    this.state.amount = amount;
   }
 
   handleSubmit() {
@@ -94,15 +92,15 @@ export class Store {
   }
 
   handleDescriptionInputFocus() {
-    this._state.templateTableVisible = true;
+    this.state.templateTableVisible = true;
   }
 
   handleDescriptionInputBlur() {
-    this._state.templateTableVisible = false;
+    this.state.templateTableVisible = false;
   }
 
   setFocusDescriptionInput(focusDescriptionInput: () => void) {
-    this._state.focusDescriptionInput = focusDescriptionInput;
+    this.state.focusDescriptionInput = focusDescriptionInput;
   }
 
   handleItemSelect(id: number) {
@@ -122,38 +120,38 @@ export class Store {
   }
 
   private computeFilteredJournals() {
-    this._state.filteredJournals =
+    this.state.filteredJournals =
       this.state.journals.filter(_ => _.selfAccountId === this.state.selfAccountId);
   }
 
   private computeFilteredJournalTemplates() {
-    this._state.filteredJournalTemplates =
+    this.state.filteredJournalTemplates =
       this.state.journalTemplates.filter(_ => _.selfAccountId === this.state.selfAccountId);
   }
 
   private computeSelfAccount() {
-    this._state.selfAccount = this.state.accounts.find(_ => _.id === this.state.selfAccountId)!
+    this.state.selfAccount = this.state.accounts.find(_ => _.id === this.state.selfAccountId)!
   }
 
   private computeCorrAccount() {
-    this._state.corrAccount = this.state.accounts.find(_ => _.id === this.state.corrAccountId)!
+    this.state.corrAccount = this.state.accounts.find(_ => _.id === this.state.corrAccountId)!
   }
 
   private addJournal(journal: Omit<Journal, 'id'>) {
-    this._state.journals =
+    this.state.journals =
     [...this.state.journals, { ...journal, id: this.state.journals.length + 1 }];
   }
 
   private clearForm() {
-    this._state.description = ''
-    this._state.corrAccountId = 1
-    this._state.amount = ''
+    this.state.description = ''
+    this.state.corrAccountId = 1
+    this.state.amount = ''
   }
 
   private setTemplateToForm(item: JournalTemplate) {
-    this._state.description = item.description;
-    this._state.corrAccountId = item.corrAccountId;
-    this._state.amount = item.amount;
+    this.state.description = item.description;
+    this.state.corrAccountId = item.corrAccountId;
+    this.state.amount = item.amount;
 
     if (this.state.focusDescriptionInput) {
       this.state.focusDescriptionInput();
