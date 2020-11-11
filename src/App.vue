@@ -5,7 +5,7 @@
     <div>自科目</div>
     <v-spacer width="5px" />
     <account-select
-      :accounts="state.accounts"
+      :accounts="state.accounts.accounts"
       :account-id="state.criteria.selfAccountId"
       @account-change="handleSelfAccountChange"
       />
@@ -29,7 +29,7 @@
     <div class="corr-account">
       <div>相手科目</div>
       <account-select
-        :accounts="state.accounts"
+        :accounts="state.accounts.accounts"
         :account-id="state.journalForm.corrAccountId"
         @account-change="handleCorrAccountChange"
         />
@@ -66,7 +66,8 @@ import AmountInput from './components/AmountInput.vue'
 import JournalFormSubmitButton from './components/JournalFormSubmitButton.vue'
 import JournalTemplateTable from './components/JournalTemplateTable.vue'
 import VSpacer from './components/VSpacer.vue'
-import store from './store';
+
+const store = require('./store').default;
 
 export default defineComponent({
   name: 'App',
@@ -84,88 +85,55 @@ export default defineComponent({
   setup() {
     const descriptionInput = ref(null);
 
-    const state = ref(store.getState());
-
-    store.subscribe(() => {
-      state.value = store.getState();
-    });
-
     const handleSelfAccountChange = (selfAccountId: number) => {
-      store.dispatch({
-        type: 'ChangeSelfAccount',
-        selfAccountId
-      });
+      store.commit('changeSelfAccount', { selfAccountId });
     };
 
     const handleDescriptionChange = (description: string) => {
-      store.dispatch({
-        type: 'ChangeDescription',
-        description
-      });
+      store.commit('changeDescription', { description });
     };
 
     const handleCorrAccountChange = (corrAccountId: number) => {
-      store.dispatch({
-        type: 'ChangeCorrAccount',
-        corrAccountId
-      });
+      store.commit('changeCorrAccount', { corrAccountId });
     };
 
     const handleAmountChange = (amount: string) => {
-      store.dispatch({
-        type: 'ChangeAmount',
-        amount
-      });
+      store.commit('changeAmount', { amount });
     };
 
     const handleSubmit = () => {
-      store.dispatch({
-        type: 'SubmitJournalForm'
-      });
+      store.dispatch('submitJournalForm');
     };
 
     const handleDescriptionInputFocus = () => {
-      store.dispatch({
-        type: 'ShowJournalTemplates'
-      });
+      store.commit('showJournalTemplates');
     };
 
     const handleDescriptionInputBlur = () => {
-      store.dispatch({
-        type: 'HideJournalTemplates'
-      });
+      store.commit('hideJournalTemplates');
     };
 
     const handleItemSelect = (id: number) => {
-      store.dispatch({
-        type: 'SelectJournalTemplate',
-        id
-      });
+      store.dispatch('selectJournalTemplate', { id });
 
       (descriptionInput.value as any).focus();
     };
 
     const handleIndexInput = (index: string) => {
-      store.dispatch({
-        type: 'FindJournalTemplateByIndex',
-        index
-      });
+      store.dispatch('findJournalTemplateByIndex', { index });
     };
 
     const init = () => {
-      const { criteria: { selfAccountId } } = store.getState();
+      const { criteria: { selfAccountId } } = store.state;
 
-      store.dispatch({
-        type: 'ChangeSelfAccount',
-        selfAccountId
-      });
+      store.commit('changeSelfAccount', { selfAccountId });
     };
 
     init();
 
     return {
       descriptionInput,
-      state,
+      state: store.state,
       handleSelfAccountChange,
       handleDescriptionChange,
       handleCorrAccountChange,
