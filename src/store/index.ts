@@ -26,7 +26,7 @@ export class Store {
   public state: State;
 
   constructor(initialState: State) {
-    this.state = reactive(initialState);
+    this.state = reactive({ ...initialState });
 
     this.computeFilteredJournals();
     this.computeFilteredJournalTemplates();
